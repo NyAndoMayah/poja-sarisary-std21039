@@ -11,6 +11,7 @@ import java.time.Duration;
 import javax.imageio.ImageIO;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import school.hei.sarisary.endpoint.rest.model.RestImage;
 import school.hei.sarisary.file.BucketComponent;
@@ -21,8 +22,9 @@ import school.hei.sarisary.repository.model.Image;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ImageService {
-  private BucketComponent bucketComponent;
-  private ImageRepository imageRepository;
+  @Autowired private BucketComponent bucketComponent;
+
+  @Autowired private ImageRepository imageRepository;
   private final Duration DURATION = Duration.ofMinutes(30);
 
   protected File convertToBlackAndWhite(File inputImage) {
