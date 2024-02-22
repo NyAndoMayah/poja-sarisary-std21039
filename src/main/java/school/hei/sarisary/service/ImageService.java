@@ -12,7 +12,6 @@ import javax.imageio.ImageIO;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import school.hei.sarisary.endpoint.rest.model.RestImage;
 import school.hei.sarisary.file.BucketComponent;
 import school.hei.sarisary.repository.ImageRepository;
@@ -48,12 +47,11 @@ public class ImageService {
   }
 
   @Transactional
-  public byte[] processImage(String id, MultipartFile multipartFile) throws IOException {
-    File originalImage = multipartFile.getResource().getFile();
+  public byte[] processImage(String id, byte[] bytes) throws IOException {
+    File originalImage = Files.write(Path.of("/tmp/originalImage" + id + ".jpeg"), bytes).toFile();
     File modifiedImage = convertToBlackAndWhite(originalImage);
 
-    Image imageToSave =
-        Image.builder().id(id).filename(multipartFile.getOriginalFilename()).build();
+    Image imageToSave = Image.builder().id(id).filename(originalImage.getName()).build();
 
     Image savedImage = imageRepository.save(imageToSave);
 
